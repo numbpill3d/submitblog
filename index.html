@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>_elri3l-::-2133//Update_Widget v1.0.2</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+    
+    :root {
+      --pastel-cyan: #84f7d3;
+      --pastel-pink: #ffb3cb;
+      --pastel-purple: #b39ddb;
+      --dark-bg: #1a1a2e;
+      --win98-grey: #c0c0c0;
+      --win98-border-light: #ffffff;
+      --win98-border-dark: #808080;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--dark-bg);
+      color: var(--pastel-cyan);
+      font-family: 'VT323', monospace;
+      padding: 20px;
+      min-height: 100vh;
+      background-image: 
+        linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(255,255,255,0.05) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.05) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.05) 75%);
+      background-size: 20px 20px;
+    }
+
+    .window {
+      background: var(--win98-grey);
+      border: 2px solid;
+      border-color: var(--win98-border-light) var(--win98-border-dark) var(--win98-border-dark) var(--win98-border-light);
+      padding: 2px;
+      max-width: 600px;
+      margin: 50px auto;
+      box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .title-bar {
+      background: linear-gradient(90deg, var(--pastel-purple), var(--pastel-pink));
+      padding: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--dark-bg);
+    }
+
+    .title-bar-controls {
+      display: flex;
+      gap: 4px;
+    }
+
+    .title-bar-button {
+      width: 16px;
+      height: 16px;
+      background: var(--win98-grey);
+      border: 1px solid;
+      border-color: var(--win98-border-light) var(--win98-border-dark) var(--win98-border-dark) var(--win98-border-light);
+    }
+
+    .window-content {
+      padding: 20px;
+      background: var(--dark-bg);
+      border: 2px solid;
+      border-color: var(--win98-border-dark) var(--win98-border-light) var(--win98-border-light) var(--win98-border-dark);
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px var(--pastel-pink);
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      background: rgba(0,0,0,0.8);
+      border: 2px solid;
+      border-color: var(--win98-border-dark) var(--win98-border-light) var(--win98-border-light) var(--win98-border-dark);
+      color: var(--pastel-cyan);
+      font-family: 'VT323', monospace;
+      font-size: 16px;
+    }
+
+    .submit-btn {
+      padding: 8px 20px;
+      background: var(--win98-grey);
+      border: 2px solid;
+      border-color: var(--win98-border-light) var(--win98-border-dark) var(--win98-border-dark) var(--win98-border-light);
+      cursor: pointer;
+      font-family: 'VT323', monospace;
+      font-size: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submit-btn:active {
+      border-color: var(--win98-border-dark) var(--win98-border-light) var(--win98-border-light) var(--win98-border-dark);
+    }
+
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      animation: shine 2s infinite;
+    }
+
+    @keyframes shine {
+      to {
+        left: 100%;
+      }
+    }
+
+    .matrix-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0.1;
+      z-index: -1;
+    }
+
+    .status-bar {
+      margin-top: 15px;
+      padding: 4px;
+      background: var(--win98-grey);
+      border: 2px solid;
+      border-color: var(--win98-border-dark) var(--win98-border-light) var(--win98-border-light) var(--win98-border-dark);
+      font-size: 14px;
+      color: var(--dark-bg);
+    }
+  </style>
+</head>
+<body>
+  <div class="window">
+    <div class="title-bar">
+      <div class="title-bar-text">_CYBER.NEXUS//Update_Widget v1.0.2</div>
+      <div class="title-bar-controls">
+        <button class="title-bar-button">_</button>
+        <button class="title-bar-button">□</button>
+        <button class="title-bar-button">×</button>
+      </div>
+    </div>
+    <div class="window-content">
+      <h1>&gt; UPDATE_MATRIX</h1>
+      <input type="text" id="post-title" class="input-field" placeholder="&gt; ENTER_TITLE.exe">
+      <textarea id="post-content" class="input-field" rows="6" placeholder="&gt; INJECT_CONTENT.dll"></textarea>
+      <button id="post-button" class="submit-btn">EXECUTE_UPDATE.sys</button>
+      <div class="status-bar">STATUS: Ready for data injection...</div>
+    </div>
+  </div>
+  <canvas class="matrix-overlay" id="matrix"></canvas>
+
+  <script>
+    const supabaseUrl = "https://your-supabase-url.supabase.co";
+    const supabaseKey = "your-supabase-key";
+
+    // Matrix rain effect
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const chars = "01010101";
+    const charSize = 12;
+    const columns = canvas.width / charSize;
+    const drops = Array(Math.floor(columns)).fill(0);
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      ctx.fillStyle = '#84f7d380';
+      ctx.font = `${charSize}px 'VT323'`;
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * charSize, drops[i] * charSize);
+        drops[i]++;
+        if (drops[i] * charSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+      }
+    }
+
+    setInterval(drawMatrix, 50);
+
+    // Form submission
+    document.getElementById("post-button").addEventListener("click", async () => {
+      const statusBar = document.querySelector('.status-bar');
+      statusBar.textContent = "STATUS: Initiating data transfer...";
+      
+      const title = document.getElementById("post-title").value;
+      const content = document.getElementById("post-content").value;
+
+      try {
+        const response = await fetch(`${supabaseUrl}/rest/v1/posts`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": supabaseKey,
+          },
+          body: JSON.stringify({ title, content }),
+        });
+
+        if (response.ok) {
+          statusBar.textContent = "STATUS: Data injection successful. Matrix updated.";
+        } else {
+          statusBar.textContent = "STATUS: ERROR - Data transfer failed. Check connection.";
+        }
+      } catch (error) {
+        statusBar.textContent = "STATUS: CRITICAL ERROR - Network breach detected.";
+      }
+    });
+  </script>
+</body>
+</html>
