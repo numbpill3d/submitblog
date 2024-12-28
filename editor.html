@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>_HIST.NEXUS//Code_Weaver v1.0.2</title>
+  <link rel="manifest" href="/manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --hist-green: #84f7d3;
+      --hist-dark: #1a1a2e;
+      --hist-accent: #b39ddb;
+      --skooma-pink: #ffb3cb;
+      --win98-grey: #c0c0c0;
+      --win98-border-light: #ffffff;
+      --win98-border-dark: #808080;
+      --shadow-scale: rgba(132, 247, 211, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--hist-dark);
+      color: var(--hist-green);
+      font-family: 'VT323', monospace;
+      padding: 20px;
+      min-height: 100vh;
+      background-image: 
+        linear-gradient(45deg, var(--shadow-scale) 25%, transparent 25%),
+        linear-gradient(-45deg, var(--shadow-scale) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, var(--shadow-scale) 75%),
+        linear-gradient(-45deg, transparent 75%, var(--shadow-scale) 75%);
+      background-size: 20px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 2em;
+      text-shadow: 0 0 10px var(--hist-green);
+      letter-spacing: 2px;
+    }
+
+    .window {
+      background: var(--win98-grey);
+      border: 2px solid;
+      border-color: var(--win98-border-light) var(--win98-border-dark) var(--win98-border-dark) var(--win98-border-light);
+      margin-bottom: 20px;
+    }
+
+    .window-title {
+      background: linear-gradient(90deg, var(--hist-accent), var(--skooma-pink));
+      padding: 4px;
+      font-weight: bold;
+      color: var(--hist-dark);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .window-controls {
+      display: flex;
+      gap: 4px;
+    }
+
+    .window-button {
+      width: 16px;
+      height: 16px;
+      background: var(--win98-grey);
+      border: 1px solid;
+      border-color: var(--win98-border-light) var(--win98-border-dark) var(--win98-border-dark) var(--win98-border-light);
+      cursor: pointer;
+    }
+
+    .editor-container {
+      background: var(--hist-dark);
+      border: 2px solid;
+      border-color: var(--win98-border-dark) var(--win98-border-light) var(--win98-border-light) var(--win98-border-dark);
+      padding: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 150px;
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid var(--hist-green);
+      color: var(--hist-green);
+      font-family: 'VT323', monospace;
+      padding: 10px;
+      resize: vertical;
+      font-size: 16px;
+      line-height: 1.4;
+      box-shadow: inset 0 0 10px rgba(132, 247, 211, 0.1);
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--skooma-pink);
+      box-shadow: 0 0 15px var(--shadow-scale);
+    }
+
+    #preview {
+      min-height: 200px;
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid var(--hist-green);
+      padding: 15px;
+      overflow: auto;
+      font-size: 14px;
+      position: relative;
+    }
+
+    #preview::before {
+      content: "// Hist's reflection manifests here...";
+      color: var(--hist-green);
+      opacity: 0.5;
+      font-style: italic;
+    }
+
+    .submit-btn {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 30px;
+      background: var(--win98-grey);
+      border: 2px solid;
+      border-color: var(--win98-border-light) var(--win98-border-dark) var(--win98-border-dark) var(--win98-border-light);
+      font-family: 'VT323', monospace;
+      font-size: 18px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submit-btn:hover::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, var(--shadow-scale), transparent);
+      animation: hist-flow 2s infinite;
+    }
+
+    @keyframes hist-flow {
+      to {
+        left: 100%;
+      }
+    }
+
+    .status-bar {
+      background: var(--win98-grey);
+      border: 2px solid;
+      border-color: var(--win98-border-dark) var(--win98-border-light) var(--win98-border-light) var(--win98-border-dark);
+      padding: 4px;
+      margin-top: 20px;
+      font-size: 14px;
+      color: var(--hist-dark);
+    }
+
+    /* Hist particles animation */
+    .hist-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>_HIST.NEXUS//Code_Weaver v1.0.2</h1>
+
+    <!-- HTML Editor -->
+    <div class="window">
+      <div class="window-title">
+        <span>HTML_Weave.hist</span>
+        <div class="window-controls">
+          <button class="window-button">_</button>
+          <button class="window-button">□</button>
+          <button class="window-button">×</button>
+        </div>
+      </div>
+      <div class="editor-container">
+        <textarea id="html" placeholder="// Inscribe your HTML runes here, smoothskin..."></textarea>
+      </div>
+    </div>
+
+    <!-- CSS Editor -->
+    <div class="window">
+      <div class="window-title">
+        <span>CSS_Essence.hist</span>
+        <div class="window-controls">
+          <button class="window-button">_</button>
+          <button class="window-button">□</button>
+          <button class="window-button">×</button>
+        </div>
+      </div>
+      <div class="editor-container">
+        <textarea id="css" placeholder="// Let the Hist guide your styles..."></textarea>
+      </div>
+    </div>
+
+    <!-- JavaScript Editor -->
+    <div class="window">
+      <div class="window-title">
+        <span>JS_Shadowscale.hist</span>
+        <div class="window-controls">
+          <button class="window-button">_</button>
+          <button class="window-button">□</button>
+          <button class="window-button">×</button>
+        </div>
+      </div>
+      <div class="editor-container">
+        <textarea id="js" placeholder="// Channel the ancient scripts of Black Marsh..."></textarea>
+      </div>
+    </div>
+
+    <!-- Live Preview -->
+    <div class="window">
+      <div class="window-title">
+        <span>Hist_Mirror.exe</span>
+        <div class="window-controls">
+          <button class="window-button">_</button>
+          <button class="window-button">□</button>
+          <button class="window-button">×</button>
+        </div>
+      </div>
+      <div class="editor-container">
+        <div id="preview"></div>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button id="post-button" class="submit-btn">EXECUTE_HIST_PROTOCOL.sys</button>
+
+    <div class="status-bar">STATUS: Awaiting your command, Hist-kin...</div>
+  </div>
+
+  <canvas class="hist-particles" id="histCanvas"></canvas>
+
+  <script>
+    // Initialize Hist particle system
+    const canvas = document.getElementById('histCanvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    const particleCount = 50;
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.speedY = (Math.random() - 0.5) * 0.5;
+        this.life = 1;
+        this.decay = 0.003 + Math.random() * 0.002;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.life -= this.decay;
+
+        if (this.life <= 0) {
+          this.reset();
+        }
+      }
+
+      draw() {
+        ctx.fillStyle = `rgba(132, 247, 211, ${this.life * 0.2})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // Initialize particles
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle());
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+
+      requestAnimationFrame(animateParticles);
+    }
+
+    animateParticles();
+
+    // Editor functionality
+    const htmlInput = document.getElementById("html");
+    const cssInput = document.getElementById("css");
+    const jsInput = document.getElementById("js");
+    const preview = document.getElementById("preview");
+    const statusBar = document.querySelector('.status-bar');
+
+    function updatePreview() {
+      const html = htmlInput.value;
+      const css = `<style>${cssInput.value}</style>`;
+      const js = `<script>${jsInput.value}<\/script>`;
+      preview.innerHTML = html + css + js;
+      statusBar.textContent = "STATUS: Hist energies flowing through the code...";
+    }
+
+    htmlInput.addEventListener("input", updatePreview);
+    cssInput.addEventListener("input", updatePreview);
+    jsInput.addEventListener("input", updatePreview);
+
+    document.getElementById("post-button").addEventListener("click", async () => {
+      statusBar.textContent = "STATUS: Channeling data through the Hist network...";
+      
+      const title = prompt("Enter a title for your inscription:");
+      if (!title) return;
+
+      const post = {
+        title,
+        html: htmlInput.value,
+        css: cssInput.value,
+        js: jsInput.value,
+      };
+
+      // Save to Supabase
+      const supabaseUrl = "https://lgerukrorundsjlxuxgk.supabase.co";
+      const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxnZXJ1a3JvcnVuZHNqbHh1eGdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzUzOTc1ODQsImV4cCI6MjA1MDk3MzU4NH0.PvRlvoLBst52mOQ5w8QypGIZsnKkj0_gacck_wC8jDA";
+      
+      try {
+        const response = await fetch(`${supabaseUrl}/rest/v1/posts`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": supabaseKey,
+          },
+          body: JSON.stringify(post),
+        });
+
+        if (response.ok) {
+          statusBar.textContent = "STATUS: The Hist has accepted your offering.";
+          htmlInput.value = "";
+          cssInput.value = "";
+          jsInput.value = "";
+          preview.innerHTML = "// Hist's reflection manifests here...";
+        } else {
+          statusBar.textContent = "STATUS: The Hist rejected the connection. Check your runes.";
+        }
+      } catch (error) {
+        statusBar.textContent = "STATUS: CRITICAL - The shadows have blocked our path.";
+      }
+    });
+
+    // Service worker registration
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/service-worker.js");
+    }
+  </script>
+</body>
+</html>
